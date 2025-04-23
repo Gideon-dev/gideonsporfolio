@@ -59,9 +59,9 @@ export const navLinks = [
   export const myProjects = [
     {
       title: 'Unitoria - Learning Platform',
-      desc: 'Podcastr is a revolutionary Learning platform that transforms the way students study. With advanced courses from in-school tutors, it also allows creators to generate income from contents and exposure.',
+      desc: 'Unitoria is a revolutionary Learning platform that transforms the way students study. With advanced courses from in-school tutors, it also allows creators to generate income from contents and exposure.',
       subdesc:
-        'Built as a unique Software-as-a-Service app with Next.js 14, Tailwind CSS, TypeScript, Framer Motion and Cloudfare, Unitoria is designed for optimal performance and scalability.',
+        'Built as a unique Software-as-a-Service app with Next.js 15, Tailwind CSS, TypeScript, Framer Motion and Cloudfare, Unitoria is designed for optimal performance and scalability.',
       href: 'https://unitoriamvp.vercel.app/',
       texture: '/textures/project/project-unitoria.mp4',
       logo: '/assets/favicon.png',
