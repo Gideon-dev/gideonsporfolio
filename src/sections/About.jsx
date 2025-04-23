@@ -27,7 +27,7 @@ const About = () => {
                     <div>
                         <p className='grid-headtext'>Hi, I'm Gideon</p>
                         <p className='grid-subtext'>
-                            With 2 years experience, I have honed my skills in frontend development, with a focus on animated 3D websites.
+                            With 2 years experience, I have honed my skills in frontend development, with a primary focus on animated 3D websites.
                         </p>
                     </div>
                 </div>
@@ -42,7 +42,10 @@ const About = () => {
                     />
                     <div>
                         <p className="grid-headtext"> Teach Stack</p>
-                        <p className="grid-subtext"> I specialize in, JavaScript/Typescript with focus on React and Next.js ecosystems. </p>
+                        <p className="grid-subtext"> 
+                            I specialize in, JavaScript/Typescript with focus on React and Next.js ecosystems. 
+                            Also in Shopify Liquid development and Shopify ecosystems
+                        </p>
                     </div>
                 </div>
             </div>
