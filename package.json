@@ -6,8 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "post-build": "react-snap",
     "lint": "eslint .",
     "preview": "vite preview"
+  },
+  "reactSnap": {
+    "inlineCss": true,
+    "puppeteerArgs": [
+      "--no-sandbox"
+    ],
+    "routes": [
+      "/"
+    ]
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -20,7 +30,10 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-globe.gl": "^2.33.2",
+    "react-helmet-async": "^2.0.5",
     "react-responsive": "^10.0.0",
+    "react-router-dom": "^7.6.3",
+    "react-snap": "^1.23.0",
     "three": "^0.172.0",
     "three-mesh-bvh": "^0.8.3"
   },

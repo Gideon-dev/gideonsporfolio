@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" fill="white"/>
+  <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central"
+        font-size="34" font-family="Segoe UI, Roboto, sans-serif" font-weight="600" fill="black">
+    AG
+  </text>
+</svg>
