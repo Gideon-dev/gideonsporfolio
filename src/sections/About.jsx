@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Globe from 'react-globe.gl';
 import Button from '../components/Button';
 
@@ -15,7 +15,7 @@ const About = () => {
     
 
   return (
-    <section className='c-space my-20' id="about">
+    <section className='c-space my-20 scroll-mt-24' id="about">
       <div className='grid xl:grid-cols-3 xl:grid-rows-6 md:grid-cols-2 grid-cols-1 gap-5 h-full'>
             <div className='col-span-1 xl:row-span-3'>
                 <div className='grid-container'>
@@ -25,7 +25,7 @@ const About = () => {
                     className='w-full sm:h-[276px] h-fit object-contain'
                     />
                     <div>
-                        <p className='grid-headtext'>Hi, I'm Gideon</p>
+                        <p className='grid-headtext'>Hi, I&amp;m Gideon</p>
                         <p className='grid-subtext'>
                             With 2 years experience, I have honed my skills in frontend development, with a primary focus on animated 3D websites.
                         </p>
@@ -72,7 +72,7 @@ const About = () => {
                     </div>
                     <div>
                       <p className="grid-headtext"> I work remotely across most timezones</p>
-                      <p className="grid-subtext"> I'm based in Nigeria, with remote services available</p>
+                      <p className="grid-subtext"> I&amp;m based in Nigeria, with remote services available</p>
                       <Button name="contact me" isBeam containerClass="w-full mt-10"/>
                     </div>
                 </div>
@@ -85,7 +85,7 @@ const About = () => {
                         <p className="grid-headtext"> My passion for coding. </p>
                         <p className="grid-subtext"> 
                             I love solving problems and buiilding things through code.
-                            Coding isn't just my profession -  it's my passion 
+                            Coding isn&amp;t just my profession -  it&amp;s my passion 
                         </p>
                     </div>
                 </div>

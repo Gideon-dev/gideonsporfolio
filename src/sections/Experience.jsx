@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import CanvasLoader from "../components/CanvasLoader";
 import Developer from "../components/Developer";
 import { OrbitControls } from "@react-three/drei";
+import SceneBoundary from "../components/SceneBoundary";
 
 const Experience = () => {
   const[animationName, setAnimationName] = useState('idle');
@@ -14,6 +15,7 @@ const Experience = () => {
             <h3 className="head-text">My Work Experience</h3>
             <div className="work-container">
                 <div className="work-canvas">
+                  <SceneBoundary>
                   <Canvas>
                     <Suspense fallback={<CanvasLoader/>}>
                       <Developer position-y={-3} scale={3} animationName={animationName}/>
@@ -25,6 +27,7 @@ const Experience = () => {
                     <directionalLight position={[10,10,10]} intensity={1}/>
                     <OrbitControls enableZoom={false} maxPolarAngle={Math.PI / 2}/>
                   </Canvas>
+                  </SceneBoundary>
                 </div>
                 <div className="work-content">           
                   <div className="sm:py-10 py-5 sm:px-5 px-2.5">

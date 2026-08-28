@@ -53,5 +53,9 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.5"
+  },
+  "allowScripts": {
+    "esbuild@0.24.2": true,
+    "puppeteer@1.20.0": true
   }
 }

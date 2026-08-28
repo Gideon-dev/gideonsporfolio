@@ -4,6 +4,7 @@ import { Canvas } from '@react-three/fiber';
 import { Center, OrbitControls } from '@react-three/drei';
 import CanvasLoader from '../components/CanvasLoader';
 import DemoComputer from '../components/DemoComputer';
+import SceneBoundary from '../components/SceneBoundary';
 
 
 
@@ -22,7 +23,7 @@ const Project = () => {
     };
 
   return (
-    <section className="c-space my-20">
+    <section id="work" className="c-space my-20 scroll-mt-24">
         <p className="head-text">My Work</p>
         <div className="grid lg:grid-cols-2 grid-cols-1 mt-12 gap-5 w-full">
             <div className="flex flex-col gap-5 relative sm:p-10 py-10 shadow-2xl shadow-black-200">
@@ -60,6 +61,7 @@ const Project = () => {
                 </div>
             </div>
             <div className="border border-black-300 bg-black-200 rounded-lg h-96 md:h-full">
+                <SceneBoundary>
                 <Canvas>
                     <ambientLight intensity={Math.PI} />
                     <directionalLight position={[10, 10,5]}/>
@@ -72,6 +74,7 @@ const Project = () => {
                     </Center>
                     <OrbitControls maxPolarAngle={Math.PI / 2} enableZoom={false}/>
                 </Canvas>
+                </SceneBoundary>
             </div>
         </div>
     </section>
