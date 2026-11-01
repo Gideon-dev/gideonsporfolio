@@ -1,61 +1,37 @@
 {
-  "name": "vite-portfolio-react",
+  "name": "gideons-portfolio",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "0.1.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "post-build": "react-snap",
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "generate-sitemap": "node scripts/generate-sitemap.js"
-  },
-  "reactSnap": {
-    "inlineCss": true,
-    "puppeteerArgs": [
-      "--no-sandbox"
-    ],
-    "routes": [
-      "/"
-    ]
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
+    "@emailjs/browser": "^5.0.3",
     "@gsap/react": "^2.1.2",
-    "@react-three/drei": "^9.120.5",
-    "@react-three/fiber": "^8.17.10",
-    "gsap": "^3.12.7",
-    "leva": "^0.9.35",
-    "maath": "^0.10.8",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-globe.gl": "^2.33.2",
-    "react-helmet-async": "^2.0.5",
-    "react-responsive": "^10.0.0",
-    "react-router-dom": "^7.6.3",
-    "react-snap": "^1.23.0",
-    "sitemap": "^8.0.0",
-    "three": "^0.172.0",
-    "three-mesh-bvh": "^0.8.3"
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "framer-motion": "^12.43.0",
+    "gsap": "^3.15.0",
+    "next": "^16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-globe.gl": "^2.38.0",
+    "three": "^0.187.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "@vitejs/plugin-react": "^4.3.4",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^9.17.0",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.16",
-    "globals": "^15.14.0",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.17",
-    "vite": "^6.0.5"
-  },
-  "allowScripts": {
-    "esbuild@0.24.2": true,
-    "puppeteer@1.20.0": true
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.187.0",
+    "autoprefixer": "^10.6.2",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.3",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3"
   }
 }

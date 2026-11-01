@@ -1,0 +1,3 @@
+allowBuilds:
+  # Ships prebuilt native bindings; its postinstall is only a fallback download.
+  unrs-resolver: false
