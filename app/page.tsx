@@ -10,7 +10,7 @@ export default function Home() {
     <main id="main" className="max-w-7xl mx-auto">
       <Hero />
       <About />
-      <Projects />
+      {/* <Projects /> */}
       <Experience />
       <Clients />
       <Contact />
