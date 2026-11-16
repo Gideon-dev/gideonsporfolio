@@ -2,8 +2,9 @@
 
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import Image from "next/image";
-import emailjs from "@emailjs/browser";
-import { site } from "@/lib/site";
+import CopyEmail from "@/components/about/CopyEmail";
+import LocalTime from "@/components/ui/LocalTime";
+import { activeSocials, site } from "@/lib/site";
 
 const EMAILJS = {
   serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "",
@@ -28,6 +29,8 @@ const Contact = () => {
     setStatus("sending");
 
     try {
+      // Loaded on submit so the form costs nothing until it is used.
+      const { default: emailjs } = await import("@emailjs/browser");
       await emailjs.send(
         EMAILJS.serviceId,
         EMAILJS.templateId,
@@ -49,88 +52,141 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="c-space my-20 scroll-mt-24" aria-labelledby="contact-heading">
-      <div className="relative min-h-screen flex items-center justify-center flex-col">
-        <Image
-          src="/assets/terminal.png"
-          alt=""
-          fill
-          sizes="(min-width: 1280px) 1200px, 100vw"
-          className="object-cover object-center"
-        />
-        <div className="contact-container">
-          <h2 id="contact-heading" className="head-text">
-            Let&apos;s Talk
-          </h2>
-          <p className="text-lg text-white-600 mt-3">
-            Whether you are hiring for a frontend role or have a product to build or improve, I&apos;d like to hear
-            about it.
-          </p>
-          {site.cvUrl && (
-            <p className="mt-4">
-              <a href={site.cvUrl} target="_blank" rel="noopener noreferrer" className="hero-link">
-                View my CV <span aria-hidden="true">↗</span>
-              </a>
-            </p>
-          )}
-          <form onSubmit={handleSubmit} className="mt-12 flex flex-col space-y-7">
-            <label className="space-y-3">
-              <span className="field-label">Full Name</span>
-              <input
-                type="text"
-                name="name"
-                autoComplete="name"
-                value={form.name}
-                onChange={handleChange}
-                required
-                placeholder="John Doe"
-                className="field-input"
-              />
-            </label>
-            <label className="space-y-3">
-              <span className="field-label">Email</span>
-              <input
-                type="email"
-                name="email"
-                autoComplete="email"
-                value={form.email}
-                onChange={handleChange}
-                required
-                placeholder="johndoe@gmail.com"
-                className="field-input"
-              />
-            </label>
-            <label className="space-y-3">
-              <span className="field-label">Your Message</span>
+    <section id="contact" className="c-space my-24 scroll-mt-24" aria-labelledby="contact-heading">
+      <p className="xp-eyebrow">Contact</p>
+      <h2 id="contact-heading" className="xp-heading">
+        Let&apos;s talk
+      </h2>
+      <p className="xp-lede">
+        Hiring for a frontend role, or have a product to build or improve? Send a note and I&apos;ll get back to you.
+      </p>
+
+      <div className="mt-12 overflow-hidden rounded-2xl border border-black-300 bg-black-200">
+        <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+          {/* Direct details */}
+          <div className="flex flex-col gap-8 border-b border-black-300 p-6 sm:p-10 lg:border-b-0 lg:border-r">
+            <div>
+              <p className="flex items-center gap-2 text-sm text-white-600">
+                {site.available && (
+                  <span className="relative flex h-2 w-2" aria-hidden="true">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60 motion-reduce:animate-none" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+                  </span>
+                )}
+                {site.available ? site.availability : site.role}
+              </p>
+              <p className="mt-2 text-sm text-white-500">Usually replies within a day.</p>
+            </div>
+
+            <div>
+              <p className="contact-label">Email</p>
+              <div className="mt-2 rounded-lg border border-black-300 bg-black-100 px-4 py-3">
+                <CopyEmail email={site.email} />
+              </div>
+            </div>
+
+            <dl className="grid grid-cols-2 gap-6 text-sm">
+              <div>
+                <dt className="contact-label">Based in</dt>
+                <dd className="mt-2 text-white-800">Lagos, {site.location}</dd>
+              </div>
+              <div>
+                <dt className="contact-label">Local time</dt>
+                <dd className="mt-2 text-white-800">
+                  <LocalTime timeZone={site.timezone} label={site.timezoneLabel} prefix="" />
+                </dd>
+              </div>
+            </dl>
+
+            <div className="mt-auto flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-black-300 pt-6">
+              {site.cvUrl && (
+                <a href={site.cvUrl} target="_blank" rel="noopener noreferrer" className="hero-link">
+                  View my CV <span aria-hidden="true">↗</span>
+                </a>
+              )}
+              {activeSocials.length > 0 && (
+                <ul className="flex gap-2" aria-label="Social links">
+                  {activeSocials.map((social) => (
+                    <li key={social.name}>
+                      <a
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer me"
+                        aria-label={social.name}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-black-300 bg-black-100 transition-colors hover:border-black-500"
+                      >
+                        <Image src={social.icon} alt="" width={18} height={18} className="h-[18px] w-auto opacity-80" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-6 sm:p-10">
+            <div className="grid gap-6 sm:grid-cols-2">
+              <label className="flex flex-col gap-2">
+                <span className="contact-label">Name</span>
+                <input
+                  type="text"
+                  name="name"
+                  autoComplete="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Your name"
+                  className="contact-input"
+                />
+              </label>
+              <label className="flex flex-col gap-2">
+                <span className="contact-label">Email</span>
+                <input
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="you@company.com"
+                  className="contact-input"
+                />
+              </label>
+            </div>
+            <label className="flex flex-1 flex-col gap-2">
+              <span className="contact-label">Message</span>
               <textarea
                 name="message"
                 value={form.message}
                 onChange={handleChange}
                 required
-                rows={5}
-                placeholder="Hi, I like your work and I want to offer you a job..."
-                className="field-input"
+                rows={6}
+                placeholder="A little about the role or the project…"
+                className="contact-input min-h-40 flex-1 resize-y"
               />
             </label>
-            <button className="field-btn" type="submit" disabled={status === "sending"}>
-              {status === "sending" ? "Sending..." : "Send Message"}
-              <Image src="/assets/arrow-up.png" alt="" width={10} height={10} className="field-btn_arrow w-auto" />
-            </button>
-            <p
-              aria-live="polite"
-              className={`min-h-6 text-base ${status === "error" ? "text-red-400" : "text-green-400"}`}
-            >
-              {status === "sent" && "Thanks, your message has been sent. I'll get back to you soon."}
-              {status === "error" && (
-                <>
-                  Something went wrong. Please try again or email me at{" "}
-                  <a className="underline" href={`mailto:${site.email}`}>
-                    {site.email}
-                  </a>
-                  .
-                </>
-              )}
-            </p>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <p
+                aria-live="polite"
+                className={`min-h-5 text-sm ${status === "error" ? "text-red-400" : "text-green-400"}`}
+              >
+                {status === "sent" && "Thanks, your message is on its way. I'll get back to you soon."}
+                {status === "error" && (
+                  <>
+                    Something went wrong. Email me at{" "}
+                    <a className="underline" href={`mailto:${site.email}`}>
+                      {site.email}
+                    </a>
+                    .
+                  </>
+                )}
+              </p>
+              <button className="contact-submit" type="submit" disabled={status === "sending"}>
+                {status === "sending" ? "Sending…" : "Send message"}
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
           </form>
         </div>
       </div>

@@ -7,11 +7,11 @@ const subscribe = (onChange: () => void) => {
   return () => window.clearInterval(id);
 };
 
-type Props = { timeZone: string; label: string };
+type Props = { timeZone: string; label: string; prefix?: string };
 
 // Shows the owner's current local time. Renders nothing on the server so the
 // markup never mismatches during hydration.
-const LocalTime = ({ timeZone, label }: Props) => {
+const LocalTime = ({ timeZone, label, prefix = "Local time" }: Props) => {
   const time = useSyncExternalStore(
     subscribe,
     () =>
@@ -22,10 +22,10 @@ const LocalTime = ({ timeZone, label }: Props) => {
   );
 
   return (
-    <p className="tabular-nums">
-      Local time{" "}
+    <span className="tabular-nums">
+      {prefix && `${prefix} `}
       <time>{time ?? "--:--"}</time> {label}
-    </p>
+    </span>
   );
 };
 

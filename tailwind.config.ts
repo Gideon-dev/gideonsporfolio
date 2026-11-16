@@ -24,9 +24,6 @@ const config: Config = {
           500: "#62646C",
         },
       },
-      backgroundImage: {
-        terminal: "url('/assets/terminal.png')",
-      },
     },
   },
   plugins: [],
