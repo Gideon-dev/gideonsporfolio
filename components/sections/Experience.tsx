@@ -9,7 +9,7 @@ const Experience = () => (
         Work &amp; Experience
       </h2>
       <p className="xp-lede">
-        Five products, newest first, from multi-app platforms to a custom storefront. Open any folder for the full case
+        Six products, newest first, from multi-app platforms to a custom storefront. Open any folder for the full case
         file.
       </p>
     </div>

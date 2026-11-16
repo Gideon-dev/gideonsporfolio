@@ -171,6 +171,117 @@ const entries: readonly Project[] = [
     ],
   },
   {
+    slug: "pznexa",
+    name: "PZ Nexa",
+    kind: "Consultancy website with a headless CMS",
+    role: "Frontend Engineer",
+    period: "Mar 2026",
+    location: LOCATION,
+    summary:
+      "The website for an African market strategy and advisory firm. I built it end to end in Next.js and connected it to Sanity, so the team publishes strategies and insights without a developer, with newsletter issues pulled in from Substack.",
+    highlights: [
+      "Sanity CMS with an embedded Studio at /studio, typed schemas and generated query types",
+      "Strategy and insight pages served from the CMS, refreshed daily, with paging that keeps filters in the URL",
+      "A one-command migration that moved the existing hard-coded content into the CMS",
+      "Newsletter issues fetched from Substack in validated batches that stay under Next.js cache limits",
+    ],
+    stack: ["Next.js 16", "React 19", "TypeScript", "Sanity", "GROQ", "Tailwind CSS 4", "zod", "Motion"],
+    facts: [
+      { label: "Product", value: "Strategy and advisory consultancy site" },
+      { label: "Content", value: "Sanity CMS and Substack" },
+      { label: "My focus", value: "Build, CMS connection, content model, design system" },
+      { label: "Ownership", value: "Sole frontend engineer" },
+    ],
+    href: "https://www.pznexa.com",
+    linkLabel: "pznexa.com",
+    overview: [
+      "PZ Nexa advises African founders and organisations on market entry, growth, capital readiness and technology. The site presents its services, client work and founder, and publishes long-form strategies, insights and a newsletter.",
+      "It is a Next.js App Router site with shadcn components and Tailwind, backed by Sanity for strategies and insights and by Substack for newsletter issues. Booking goes through Calendly and enquiries through a protected contact form.",
+    ],
+    myRole:
+      "I built the site on my own, from the design tokens and page layouts to the CMS connection, the content model and the Substack integration.",
+    sections: [
+      {
+        heading: "Connecting the CMS",
+        intro: "The goal: the team edits content in one place, and the site stays fast and static without a developer in the loop.",
+        points: [
+          {
+            title: "Studio inside the site",
+            detail:
+              "Sanity Studio is embedded at /studio, with a custom desk that lists Strategies and Insights, and the GROQ playground for checking queries. Environment variables are asserted at start-up, so a misconfigured deploy fails clearly.",
+          },
+          {
+            title: "A content model built for the pages",
+            detail:
+              "Strategies have a category, tags, an overview, challenges, numbered phases with deliverables, and outcomes, each with required-field validation and a readable preview in the Studio. Insights carry a type, category, date, read time, a featured flag with headline stats, and free or on-request access.",
+          },
+          {
+            title: "Typed queries",
+            detail: "Schema types and per-query result types are generated from the schema, so the GROQ queries and the pages agree on shape at compile time.",
+          },
+          {
+            title: "Migration in one command",
+            detail:
+              "The existing strategies and insights were hard-coded in the repo. A seed script maps them to CMS documents with stable ids and writes them in a single transaction, so it can be re-run safely.",
+          },
+        ],
+      },
+      {
+        heading: "Serving content fast",
+        points: [
+          {
+            title: "Static pages, refreshed daily",
+            detail:
+              "Listing pages fetch the first page and the total count in parallel on the server and are regenerated every 24 hours. Strategy detail pages are generated at build time from every slug in the CMS, with metadata per strategy and a 404 for unknown slugs.",
+          },
+          {
+            title: "Paging that stays in the URL",
+            detail:
+              "Category and page live in the URL. The first render uses the server's data, and later pages are fetched in the browser from Sanity's CDN with a published-only client, so the server stays out of the way after the first load.",
+          },
+          {
+            title: "GROQ paging",
+            detail: "Each listing has a sliced query and a matching count query, with a category filter. The featured insight is excluded from the grid so it never appears twice.",
+          },
+        ],
+      },
+      {
+        heading: "Newsletter from Substack",
+        points: [
+          {
+            title: "Batched and validated",
+            detail:
+              "Issues are fetched from Substack fifty at a time, the maximum it accepts, which also keeps each cached response under Next.js's two-megabyte limit. Every batch is validated with zod, de-duplicated and sorted.",
+          },
+          {
+            title: "Stable issue numbers, safe failure",
+            detail:
+              "Issue numbers count from the oldest post, so they never shift when a new one is published. If any batch fails the list is left empty rather than shown half-complete. Subscribing hands off to Substack.",
+          },
+        ],
+      },
+      {
+        heading: "Design, forms and SEO",
+        points: [
+          {
+            title: "A small design system",
+            detail:
+              "Brand colours and type are Tailwind theme tokens. Six near-identical page heroes were merged into one component with an accessible breadcrumb, and pages use a shared fade-up, count-up and page transition.",
+          },
+          {
+            title: "Contact form",
+            detail: "Built with react-hook-form and zod, with a phone field that has a country picker and validates numbers by country.",
+          },
+          {
+            title: "Metadata and headers",
+            detail:
+              "One metadata builder gives every page a canonical URL and Open Graph and Twitter cards. The site sends strict security headers, including HSTS, frame denial and a restrictive permissions policy.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     slug: "filmporte",
     name: "Filmporte",
     kind: "Film distribution platform",
