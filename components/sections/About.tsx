@@ -6,7 +6,7 @@ import Button from "@/components/ui/Button";
 import { site } from "@/lib/site";
 
 const About = () => (
-  <section className="c-space my-20 scroll-mt-24" id="about" aria-labelledby="about-heading">
+  <section className="section-glow c-space my-20 scroll-mt-24" id="about" aria-labelledby="about-heading">
     <h2 id="about-heading" className="sr-only">
       About me
     </h2>

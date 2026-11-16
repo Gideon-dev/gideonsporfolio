@@ -56,7 +56,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="c-space my-24 scroll-mt-24" aria-labelledby="contact-heading">
+    <section id="contact" className="section-glow c-space my-24 scroll-mt-24" aria-labelledby="contact-heading">
       <p className="xp-eyebrow">Contact</p>
       <h2 id="contact-heading" className="xp-heading">
         Let&apos;s talk

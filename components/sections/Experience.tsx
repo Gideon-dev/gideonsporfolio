@@ -2,7 +2,7 @@ import ExperienceStack from "@/components/experience/ExperienceStack";
 import { experienceStack } from "@/lib/experience";
 
 const Experience = () => (
-  <section id="experience" className="mt-20 scroll-mt-20" aria-labelledby="experience-heading">
+  <section id="experience" className="section-glow mt-20 scroll-mt-20" aria-labelledby="experience-heading">
     <div className="xp-intro">
       <p className="xp-eyebrow">Selected work</p>
       <h2 id="experience-heading" className="xp-heading">

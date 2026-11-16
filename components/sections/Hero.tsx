@@ -9,7 +9,7 @@ const Hero = () => {
   const [firstName, ...rest] = site.name.split(" ");
 
   return (
-    <section id="home" aria-labelledby="hero-heading" className="relative flex min-h-svh flex-col c-space pt-28 pb-8">
+    <section id="home" aria-labelledby="hero-heading" className="section-glow relative flex min-h-svh flex-col c-space pt-28 pb-8">
       <div className="flex flex-1 flex-col justify-center">
         <p className="hero-rise flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white-600" style={rise(0)}>
           {site.available && <span className="h-2 w-2 rounded-full bg-green-500" aria-hidden="true" />}

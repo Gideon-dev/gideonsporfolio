@@ -5,7 +5,7 @@ import { integrationStatus as tool } from "@/lib/tools";
 const columns = [tool.problem, tool.idea, tool.benefits] as const;
 
 const Tools = () => (
-  <section id="tools" className="c-space my-24 scroll-mt-24" aria-labelledby="tools-heading">
+  <section id="tools" className="section-glow c-space my-24 scroll-mt-24" aria-labelledby="tools-heading">
     <p className="xp-eyebrow">Internal tools</p>
     <h2 id="tools-heading" className="xp-heading">
       Built for the team

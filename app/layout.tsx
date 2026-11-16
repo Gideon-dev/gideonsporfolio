@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import JsonLd from "@/components/seo/JsonLd";
+import AmbientBackground from "@/components/ui/AmbientBackground";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           Skip to content
         </a>
         <JsonLd />
+        <AmbientBackground />
         <Navbar />
         {children}
         <Footer />
