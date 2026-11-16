@@ -22,20 +22,20 @@ pnpm dev                     # http://localhost:3000
 
 ## Environment variables
 
-| Name                              | Purpose                                                |
-| --------------------------------- | ------------------------------------------------------ |
-| `NEXT_PUBLIC_SITE_URL`            | Canonical site URL used for metadata, sitemap, JSON-LD |
-| `NEXT_PUBLIC_EMAILJS_SERVICE_ID`  | EmailJS service for the contact form                   |
-| `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` | EmailJS template for the contact form                  |
-| `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`  | EmailJS public key                                     |
+| Name                               | Purpose                                                       |
+| ---------------------------------- | ------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`             | Canonical site URL used for metadata, sitemap, JSON-LD        |
+| `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` | Web3Forms access key for the contact form (public by design) |
 
 Set the same variables in the hosting provider (e.g. Vercel project settings).
 
 ## Where things live
 
-- `lib/site.ts`: name, role, email, socials and SEO copy. Edit this first.
-- `lib/constants.ts`: nav links, projects, client reviews.
+- `lib/site.ts`: name, role, email, CV link, socials and SEO copy. Edit this first.
+- `lib/work.ts`: projects shown in the Work folders and on `/work/[slug]`.
+- `lib/tools.ts`: the Internal tools section and `/tools/integration-status` docs.
+- `lib/constants.ts`: nav links.
 - `app/layout.tsx`: site-wide metadata, fonts, JSON-LD.
 - `app/sitemap.ts`, `app/robots.ts`, `app/opengraph-image.tsx`: generated SEO routes.
 - `components/sections/*`: page sections.
-- `components/three/*`: client-only 3D scenes (loaded with `next/dynamic`, `ssr: false`).
+- `components/three/AboutGlobe.tsx`: the client-only globe (loaded with `next/dynamic`, `ssr: false`).

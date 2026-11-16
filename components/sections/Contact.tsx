@@ -6,22 +6,24 @@ import CopyEmail from "@/components/about/CopyEmail";
 import LocalTime from "@/components/ui/LocalTime";
 import { activeSocials, site } from "@/lib/site";
 
-const EMAILJS = {
-  serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "",
-  templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "",
-  publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "",
+// Web3Forms delivers submissions to the inbox the key was created for.
+// The access key is designed to be public, so it can live in client code.
+const WEB3FORMS = {
+  endpoint: "https://api.web3forms.com/submit",
+  accessKey: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "",
 };
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-const emptyForm = { name: "", email: "", message: "" };
+const emptyForm = { name: "", email: "", message: "", botcheck: false };
 
 const Contact = () => {
   const [form, setForm] = useState(emptyForm);
   const [status, setStatus] = useState<Status>("idle");
 
-  const handleChange = ({ target: { name, value } }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm((prev) => ({ ...prev, [name]: value }));
+  const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value;
+    setForm((prev) => ({ ...prev, [target.name]: value }));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -29,20 +31,22 @@ const Contact = () => {
     setStatus("sending");
 
     try {
-      // Loaded on submit so the form costs nothing until it is used.
-      const { default: emailjs } = await import("@emailjs/browser");
-      await emailjs.send(
-        EMAILJS.serviceId,
-        EMAILJS.templateId,
-        {
-          from_name: form.name,
-          to_name: site.shortName,
-          from_email: form.email,
-          to_email: site.email,
+      const response = await fetch(WEB3FORMS.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS.accessKey,
+          subject: `Portfolio message from ${form.name}`,
+          from_name: `${site.shortName}'s portfolio`,
+          name: form.name,
+          email: form.email,
           message: form.message,
-        },
-        { publicKey: EMAILJS.publicKey },
-      );
+          // Honeypot: people never see or tick this, bots often do.
+          botcheck: form.botcheck,
+        }),
+      });
+      const result: { success?: boolean; message?: string } = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message ?? `Web3Forms returned ${response.status}`);
       setStatus("sent");
       setForm(emptyForm);
     } catch (error) {
@@ -126,6 +130,16 @@ const Contact = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-6 sm:p-10">
+            <input
+              type="checkbox"
+              name="botcheck"
+              checked={form.botcheck}
+              onChange={handleChange}
+              className="hidden"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
             <div className="grid gap-6 sm:grid-cols-2">
               <label className="flex flex-col gap-2">
                 <span className="contact-label">Name</span>
