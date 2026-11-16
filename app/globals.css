@@ -10,6 +10,9 @@ body {
   background: #010103;
   color: #fff;
   font-family: "General Sans", ui-sans-serif, system-ui, sans-serif;
+  /* The jelly section transition overshoots sideways for a moment. `clip`
+     hides that without creating a scroll container, so sticky still works. */
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -77,28 +80,6 @@ body {
     @apply cursor-pointer flex justify-center items-center gap-1 w-full;
   }
 
-  /* projects section */
-  .arrow-btn {
-    @apply w-10 h-10 p-3 cursor-pointer active:scale-95 transition-all rounded-full arrow-gradient;
-  }
-
-  .tech-logo {
-    @apply w-10 h-10 rounded-md p-2 bg-neutral-100 bg-opacity-10 backdrop-filter backdrop-blur-lg flex justify-center items-center;
-  }
-
-  /* clients section */
-  .client-container {
-    @apply grid md:grid-cols-2 grid-cols-1 gap-5 mt-12;
-  }
-
-  .client-review {
-    @apply rounded-lg md:p-10 p-5 col-span-1 bg-black-300 bg-opacity-50;
-  }
-
-  .client-content {
-    @apply flex lg:flex-row flex-col justify-between lg:items-center items-start gap-5 mt-7;
-  }
-
   /* contact section */
   .contact-container {
     @apply max-w-xl relative z-10 sm:px-10 px-5 mt-12;
@@ -124,16 +105,6 @@ body {
   .social-icon {
     @apply w-12 h-12 rounded-full flex justify-center items-center bg-black-300 border border-black-200 transition-colors hover:border-black-500;
   }
-}
-
-.arrow-gradient {
-  background-image: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.1) 10%,
-    rgba(255, 255, 255, 0.000025) 50%,
-    rgba(255, 255, 255, 0.000025) 50%,
-    rgba(255, 255, 255, 0.025) 100%
-  );
 }
 
 /* Hero: a single, quiet entrance and underline links. Nothing loops. */
@@ -180,81 +151,41 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
-   Experience: poster reveal (ported from animation-sections-app LiveExperiences)
-   Sticky needs every ancestor to have overflow: visible. Don't wrap these.
+   Experience. Sticky needs every ancestor to have overflow: visible.
+   Don't wrap the folder stack in anything that clips.
    --------------------------------------------------------------------------- */
-.xp-scroll {
-  position: relative;
-  height: 200svh;
+.xp-intro {
+  padding: 24px 16px 8px;
 }
 
-.xp-stage {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.xp-heading-position {
-  position: absolute;
-  inset-inline: 0;
-  top: 50%;
-  transform: translateY(-50%);
+.xp-eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #62646c;
 }
 
 .xp-heading {
-  margin: 0;
-  font-size: 40px;
+  margin-top: 12px;
+  font-size: clamp(40px, 8vw, 104px);
   line-height: 0.95;
   letter-spacing: -0.04em;
   font-weight: 600;
-  text-align: center;
   color: #e4e4e6;
 }
 
-.xp-poster {
-  position: absolute;
-  will-change: transform;
+.xp-lede {
+  margin-top: 20px;
+  max-width: 52ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #afb0b6;
 }
 
-.xp-poster-media {
-  display: block;
-  width: 224px;
-  height: 224px;
-  border-radius: 12px;
-  object-fit: cover;
-  background: #0e0e10;
-  border: 1px solid #1c1c21;
-  box-shadow: 0 24px 48px -12px rgb(0 0 0 / 0.6);
-}
-
-.xp-static {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .xp-heading {
-    font-size: 128px;
-  }
-  .xp-poster-media {
-    width: 320px;
-    height: 320px;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1100px) {
-  .xp-heading {
-    font-size: 11vw;
-  }
-}
-
-/* Experience: stacked role cards (ported from FeatureStack) */
+/* Experience: folder stack. Each folder pins one tab-height lower than the
+   one before it, so earlier tabs stay visible above the active folder. */
 .xp-stack {
+  --xp-step: 26px; /* how much of each covered folder stays visible */
   position: relative;
   isolation: isolate;
   padding-inline: 16px;
@@ -263,28 +194,112 @@ body {
 
 .xp-sticky {
   position: sticky;
-  top: 84px; /* clears the fixed navbar */
-  height: calc(100svh - 100px);
+  top: calc(84px + var(--i) * var(--xp-step)); /* 84px clears the fixed navbar */
+  height: calc(100svh - 104px - (var(--n) - 1) * var(--xp-step));
+  display: flex;
+}
+
+.xp-folder {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  transform-origin: top center;
+  will-change: transform;
+}
+
+/* Tabs step sideways by index so every one stays readable in the stack. */
+.xp-tab {
+  position: relative;
+  align-self: flex-start;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  height: var(--xp-step);
+  /* Each tab gets an equal slot across the top edge, so any number fits. */
+  max-width: calc(100% / var(--n) - 4px);
+  margin-left: calc(var(--i) * 100% / var(--n));
+  padding-inline: 8px;
+  border: 1px solid #1c1c21;
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  background: #0e0e10;
+  font-size: 11px;
+  color: #afb0b6;
+  white-space: nowrap;
+}
+
+.xp-tab > span:first-child {
+  display: none;
+  color: #62646c;
+}
+
+.xp-tab-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Small live dot on the tab of recent work. */
+.xp-tab-recent {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgb(34 197 94 / 0.18);
+}
+
+.recent-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px 2px 8px;
+  border: 1px solid rgb(34 197 94 / 0.35);
+  border-radius: 999px;
+  background: rgb(34 197 94 / 0.08);
+  font-size: 12px;
+  font-weight: 500;
+  color: #86efac;
+}
+
+.recent-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #22c55e;
 }
 
 .xp-panel {
   position: relative;
+  flex: 1;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 24px;
-  height: 92%;
-  width: 100%;
-  padding: 24px;
-  border-radius: 20px;
+  padding: 24px 18px 18px;
+  border-radius: 0 16px 16px 16px;
   background: #0e0e10;
   border: 1px solid #1c1c21;
   overflow: hidden;
-  transform-origin: top center;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.4);
-  will-change: transform, opacity;
+  box-shadow: 0 -18px 40px -18px rgb(0 0 0 / 0.75), 0 20px 25px -5px rgb(0 0 0 / 0.4);
+}
+
+/* The first folder's tab sits flush left, so its panel keeps a square corner
+   there. Later folders round it. */
+.xp-sticky:not(:first-child) .xp-panel {
+  border-top-left-radius: 16px;
+}
+
+/* Darkens a folder as others stack on top of it. */
+.xp-shade {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px 16px 16px 16px;
+  background: #010103;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .xp-copy {
@@ -302,9 +317,9 @@ body {
 }
 
 .xp-role {
-  margin-top: 16px;
+  margin-top: 14px;
   font-size: 26px;
-  line-height: 1.15;
+  line-height: 1.1;
   font-weight: 600;
   letter-spacing: -0.02em;
   color: #e4e4e6;
@@ -313,22 +328,22 @@ body {
 .xp-company {
   display: block;
   margin-top: 6px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 0;
   color: #afb0b6;
 }
 
 .xp-summary {
-  margin-top: 16px;
-  max-width: 46ch;
-  font-size: 15px;
+  margin-top: 14px;
+  max-width: 52ch;
+  font-size: 14px;
   line-height: 1.6;
   color: #afb0b6;
 }
 
 .xp-highlights {
-  margin-top: 20px;
+  margin-top: 18px;
   display: grid;
   gap: 10px;
   font-size: 14px;
@@ -351,9 +366,75 @@ body {
   background: #62646c;
 }
 
-.xp-stack-tags {
+.xp-links {
   margin-top: auto;
   padding-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  font-size: 15px;
+}
+
+.xp-link-quiet {
+  color: #afb0b6;
+}
+
+.xp-link-note {
+  padding-bottom: 4px;
+  font-size: 14px;
+  color: #62646c;
+}
+
+/* Right-hand column: project facts and stack. Hidden below desktop, where the
+   folder only has room for the copy. */
+.xp-facts {
+  position: relative;
+  display: none;
+  flex-direction: column;
+  min-height: 0;
+  padding: 28px;
+  border-radius: 12px;
+  border: 1px solid #1c1c21;
+  background: #010103;
+  overflow: hidden;
+}
+
+.xp-facts-number {
+  position: absolute;
+  right: 20px;
+  bottom: -28px;
+  font-size: 200px;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  color: #0e0e10;
+  user-select: none;
+}
+
+.xp-facts dl {
+  position: relative;
+  display: grid;
+  gap: 18px;
+}
+
+.xp-fact dt {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #62646c;
+}
+
+.xp-fact dd {
+  margin-top: 4px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #e4e4e6;
+}
+
+.xp-stack-tags {
+  position: relative;
+  margin-top: auto;
+  padding-top: 24px;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -363,6 +444,7 @@ body {
   padding: 4px 10px;
   border: 1px solid #1c1c21;
   border-radius: 999px;
+  background: #0e0e10;
   font-size: 12px;
   color: #afb0b6;
 }
@@ -384,78 +466,85 @@ body {
   object-position: top center;
 }
 
+/* Below desktop the folder holds only what fits its height. */
 @media (max-width: 1023px) {
-  .xp-highlights li:nth-child(n + 3) {
+  .xp-highlights li:nth-child(n + 4) {
     display: none;
   }
-}
-
-@media (max-width: 600px) {
-  .xp-panel {
-    padding: 18px;
-    gap: 16px;
-  }
-  .xp-role {
-    font-size: 22px;
-  }
-  .xp-summary {
-    font-size: 14px;
-  }
-  .xp-stack-tags {
-    display: none;
-  }
-}
-
-/* Below desktop, media sits under the copy and fills the remaining height. */
-@media (max-width: 1023px) {
   .xp-panel:has(.xp-media) {
     grid-template-rows: auto minmax(0, 1fr);
   }
 }
 
+@media (max-width: 1023px) and (max-height: 780px) {
+  .xp-highlights li:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) and (max-height: 660px) {
+  .xp-highlights {
+    display: none;
+  }
+}
+
+@media (min-width: 640px) {
+  .xp-stack {
+    --xp-step: 36px;
+  }
+  .xp-tab {
+    max-width: min(30%, calc(100% / var(--n) - 4px));
+    margin-left: calc(var(--i) * min(168px, 100% / var(--n)));
+    padding-inline: 16px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .xp-tab > span:first-child {
+    display: inline;
+  }
+  .xp-panel {
+    padding: 32px;
+  }
+  .xp-summary {
+    font-size: 15px;
+  }
+}
+
 @media (min-width: 1024px) {
   .xp-panel {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     gap: 48px;
-    padding: 48px;
+    padding: 44px;
+  }
+  .xp-facts {
+    display: flex;
   }
   .xp-role {
     font-size: 40px;
   }
   .xp-company {
-    font-size: 20px;
-  }
-  .xp-summary {
-    font-size: 16px;
+    font-size: 18px;
   }
   .xp-highlights {
     font-size: 15px;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .xp-scroll {
+/* Laptop-height screens: four highlights would push the links out of view. */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .xp-panel {
+    padding: 32px;
+  }
+  .xp-role {
+    font-size: 32px;
+  }
+  .xp-highlights li:nth-child(n + 4) {
     display: none;
   }
-  .xp-static {
-    display: block;
-    padding: 96px 0 48px;
-  }
-  .xp-static .xp-heading {
-    font-size: clamp(40px, 7vw, 96px);
-    margin-bottom: 48px;
-  }
-  .xp-static-posters {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 24px;
-  }
-  .xp-static-posters .xp-poster-media {
-    max-width: 100%;
-    height: auto;
-    aspect-ratio: 1;
-  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .xp-stack {
     margin-block: 48px;
   }
@@ -465,27 +554,97 @@ body {
     height: auto;
     margin-bottom: 24px;
   }
-  .xp-panel {
-    min-height: 560px;
-    height: auto;
+  .xp-folder {
     transform: none !important;
-    opacity: 1 !important;
     will-change: auto;
+  }
+  .xp-tab {
+    margin-left: 0;
+  }
+  .xp-sticky .xp-panel {
+    border-top-left-radius: 0;
+  }
+  .xp-shade {
+    display: none;
+  }
+  .xp-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .xp-highlights {
+    display: grid !important;
+  }
+  .xp-highlights li {
+    display: block !important;
   }
 }
 
-/* 3D canvas loader */
-.canvas-loader {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid #3a3a49;
-  border-top-color: #e4e4e6;
-  animation: canvas-spin 0.9s linear infinite;
+/* ---------------------------------------------------------------------------
+   Tech stack orbit (About). Six chips drift around a centre mark.
+   --------------------------------------------------------------------------- */
+.orbit {
+  position: relative;
+  width: 100%;
+  max-width: 276px;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  container-type: inline-size;
 }
 
-@keyframes canvas-spin {
+.orbit-ring {
+  position: absolute;
+  inset: 0;
+  animation: orbit-spin 80s linear infinite;
+}
+
+.orbit-chip {
+  position: absolute;
+  width: 26%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid #3a3a49;
+  background: linear-gradient(145deg, #2a2a33, #131316);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 14px 24px -12px rgb(0 0 0 / 0.9);
+  /* Counter-rotate so the icons stay upright while the ring turns. */
+  animation: orbit-spin 80s linear infinite reverse;
+}
+
+.orbit-chip svg {
+  width: 46%;
+  height: 46%;
+}
+
+.orbit-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 3px solid #e4e4e6;
+  background: #010103;
+  box-shadow: 0 30px 40px -8px rgb(0 0 0 / 0.9), 0 0 0 10px rgb(255 255 255 / 0.03);
+  font-size: 12cqw;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: #e4e4e6;
+}
+
+@keyframes orbit-spin {
   to {
-    transform: rotate(360deg);
+    rotate: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-ring,
+  .orbit-chip {
+    animation: none;
   }
 }
