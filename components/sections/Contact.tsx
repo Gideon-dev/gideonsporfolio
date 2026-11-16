@@ -63,9 +63,16 @@ const Contact = () => {
             Let&apos;s Talk
           </h2>
           <p className="text-lg text-white-600 mt-3">
-            Whether you are looking to build a new website, improve your existing platform, or bring a unique project to
-            life, I&apos;m here to help.
+            Whether you are hiring for a frontend role or have a product to build or improve, I&apos;d like to hear
+            about it.
           </p>
+          {site.cvUrl && (
+            <p className="mt-4">
+              <a href={site.cvUrl} target="_blank" rel="noopener noreferrer" className="hero-link">
+                View my CV <span aria-hidden="true">↗</span>
+              </a>
+            </p>
+          )}
           <form onSubmit={handleSubmit} className="mt-12 flex flex-col space-y-7">
             <label className="space-y-3">
               <span className="field-label">Full Name</span>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { navLinks } from "@/lib/constants";
 import { site } from "@/lib/site";
 
@@ -9,9 +10,9 @@ const NavItems = ({ onClick }: { onClick?: () => void }) => (
   <ul className="nav-ul">
     {navLinks.map(({ id, href, name }) => (
       <li key={id} className="nav-li">
-        <a href={href} className="nav-li_a" onClick={onClick}>
+        <Link href={href} className="nav-li_a" onClick={onClick}>
           {name}
-        </a>
+        </Link>
       </li>
     ))}
   </ul>
@@ -25,9 +26,9 @@ const Navbar = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center py-5 mx-auto c-space">
-          <a href="#home" className="text-neutral-400 font-bold text-xl hover:text-white transition-colors">
+          <Link href="/#home" className="text-neutral-400 font-bold text-xl hover:text-white transition-colors">
             {site.shortName}
-          </a>
+          </Link>
           <button
             type="button"
             onClick={() => setIsOpen((prev) => !prev)}

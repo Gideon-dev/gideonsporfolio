@@ -62,7 +62,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         {/* General Sans is not on Google Fonts, so it loads from its CDN. */}
         <link rel="preconnect" href="https://fonts.cdnfonts.com" crossOrigin="anonymous" />

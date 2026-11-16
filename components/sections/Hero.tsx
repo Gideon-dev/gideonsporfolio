@@ -34,10 +34,15 @@ const Hero = () => {
           <p className="hero-rise max-w-xl text-lg leading-relaxed text-white-600 md:col-span-7 md:text-xl" style={rise(2)}>
             {site.intro}
           </p>
-          <div className="hero-rise flex gap-8 text-base md:col-span-5 md:justify-self-end" style={rise(3)}>
-            <a href="#work" className="hero-link">
+          <div className="hero-rise flex flex-wrap gap-x-8 gap-y-3 text-base md:col-span-5 md:justify-self-end" style={rise(3)}>
+            <a href="#experience" className="hero-link">
               View work <span aria-hidden="true">↓</span>
             </a>
+            {site.cvUrl && (
+              <a href={site.cvUrl} target="_blank" rel="noopener noreferrer" className="hero-link">
+                View CV <span aria-hidden="true">↗</span>
+              </a>
+            )}
             <a href="#contact" className="hero-link">
               Get in touch <span aria-hidden="true">→</span>
             </a>
