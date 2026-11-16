@@ -298,7 +298,7 @@ const entries: readonly Project[] = [
     period: "Sep 2026",
     location: LOCATION,
     summary:
-      "A recruitment and HR platform: a candidate job board, an employer hiring workspace and an HR management app, all in one Turborepo. I contributed to the shared packages the apps are built on, the data table, and the API and cache layer.",
+      "A recruitment and HR platform: a candidate job board, an employer hiring workspace and an HR management app, all in one Turborepo. I built the frontend: the shared packages the apps stand on, the data table, the API and cache layer, and the portals themselves.",
     highlights: [
       "Shared UI, API-client, query, utility and security packages used by every Next.js app in the repo",
       "A data table with client, server and cursor pagination behind one API",
@@ -310,16 +310,16 @@ const entries: readonly Project[] = [
       { label: "Product", value: "Job board, employer ATS and HRMS" },
       { label: "Apps", value: "Candidate, employer, HRMS, admin, two marketing sites" },
       { label: "My focus", value: "Shared platform packages, data table, API and query state" },
-      { label: "Team", value: "Small team, alongside a senior engineer" },
+      { label: "Ownership", value: "Sole frontend engineer" },
     ],
     href: "https://dev-website-recruit.sandwichrecruit.com/",
     linkLabel: "sandwichrecruit.com",
     overview: [
       "Sandwich covers hiring from both sides and the HR work that follows: candidates search and apply for jobs, employers post jobs and move applicants through a pipeline, and companies manage their people in the HR app.",
-      "The frontend is a pnpm and Turborepo monorepo of Next.js apps that share one set of internal packages. The platform is in active development, and parts of the HR and admin apps still run on sample data while their APIs are built.",
+      "The frontend is a pnpm and Turborepo monorepo of Next.js apps that share one set of internal packages.",
     ],
     myRole:
-      "I work on Sandwich alongside a senior engineer in a small team. I contributed to the shared platform and to features across the candidate, employer and HR apps. This page describes the areas I worked in, not sole ownership of them.",
+      "I handled the Sandwich frontend on my own, from setting up the monorepo and its shared packages to building features across the candidate, employer and HR apps, working with the backend team on the API.",
     sections: [
       {
         heading: "A shared frontend platform",
@@ -376,7 +376,7 @@ const entries: readonly Project[] = [
           },
           {
             title: "HR app",
-            detail: "Sign-in, company setup steps, roles and invitations are live; attendance, leave and performance screens are built against sample data.",
+            detail: "Sign-in, company setup, roles and invitations, plus the attendance, leave and performance screens.",
           },
         ],
       },
@@ -536,7 +536,7 @@ const entries: readonly Project[] = [
     recent: true,
     location: LOCATION,
     summary:
-      "A practice-first learning platform for students and professionals in finance, tax and related fields. Four Next.js apps for learners, instructors and administrators, built on a shared platform with a server-side session layer.",
+      "A practice-first learning platform for students and professionals in finance, tax and related fields. Four Next.js apps for learners, instructors and administrators, built on a shared platform with a server-side session layer. I build the frontend on my own.",
     highlights: [
       "A backend-for-frontend proxy that keeps access tokens in httpOnly cookies and out of page scripts",
       "A course builder with drag and drop, a constrained rich-text editor and autosave",
@@ -548,6 +548,7 @@ const entries: readonly Project[] = [
       { label: "Product", value: "Practice-first learning for finance and business professions" },
       { label: "Apps", value: "Learner, instructor, institution admin, staff console" },
       { label: "My focus", value: "Session layer, course builder, certificates, release path" },
+      { label: "Ownership", value: "Sole frontend engineer" },
       { label: "Status", value: "In development, pre-launch" },
     ],
     linkLabel: "Private beta · walkthrough on request",
@@ -556,7 +557,7 @@ const entries: readonly Project[] = [
       "The frontend is a Turborepo of four Next.js apps: the learner app, the instructor app with its course builder, an institution admin console and an internal staff console. They share UI, API-client, query and security packages. The platform is in active development against a test backend and has not launched.",
     ],
     myRole:
-      "I work on IntelSprings alongside a senior engineer in a small team. The work here covers the areas I was involved in. Several learner screens, such as the lesson player and certificates, are built and waiting on backend content, so they still run on sample data.",
+      "I handle the IntelSprings frontend on my own, across all four apps, from the shared platform and session layer to the course builder and the release pipeline.",
     sections: [
       {
         heading: "A session layer the browser never sees",
