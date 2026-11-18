@@ -12,9 +12,18 @@ import {
   integrationStatus as tool,
   layoutExample,
   moduleStatusLabels,
+  pendingExample,
+  probeExample,
   routeExample,
   scriptsExample,
   typesExample,
+  v2Expectations,
+  v2Limits,
+  v2Polish,
+  v2RemainingLimits,
+  v2Scripts,
+  v2UpgradeStages,
+  v2Upgrades,
   type AskKind,
   type AskStatus,
   type ModuleStatus,
@@ -33,13 +42,17 @@ export const metadata: Metadata = {
 
 const toc = [
   { id: "introduction", label: "Introduction" },
+  { id: "whats-new", label: "What's new in v2" },
   { id: "why", label: "Why it exists" },
   { id: "how-it-works", label: "How it works" },
   { id: "data-model", label: "Data model" },
   { id: "statuses", label: "Statuses" },
   { id: "ask-lifecycle", label: "Ask lifecycle" },
   { id: "status-page", label: "The status page" },
+  { id: "testing", label: "Testing the claims" },
+  { id: "scripts", label: "Scripts" },
   { id: "installation", label: "Installation" },
+  { id: "upgrading", label: "Upgrading from v1" },
   { id: "upkeep", label: "Keeping it current" },
   { id: "limits", label: "Limits" },
 ] as const;
@@ -217,6 +230,42 @@ export default function IntegrationStatusDocs() {
               Everything else (the doc, the page, the counts) is generated from that.
             </Callout>
 
+            <H2 id="whats-new">What&apos;s new in v2</H2>
+            <P>
+              Version 1 ended its own documentation with three limits. Version 2 is built around them. The largest was
+              that the tool described the integration without testing it, so a status was only ever someone&apos;s word.
+            </P>
+            <H3>The limits, and what v2 does about each</H3>
+            <div className="mt-6 space-y-4">
+              {v2Limits.map((item) => (
+                <div key={item.limit} className="rounded-lg border border-zinc-800 bg-zinc-900/40 px-4 py-4">
+                  <p className="font-medium text-zinc-100">&ldquo;{item.limit}&rdquo;</p>
+                  <dl className="mt-3 space-y-2 text-sm leading-6">
+                    <div>
+                      <dt className="inline font-medium text-zinc-300">How v2 solves it: </dt>
+                      <dd className="inline text-zinc-400">{item.how}</dd>
+                    </div>
+                    <div>
+                      <dt className="inline font-medium text-zinc-300">What you gain: </dt>
+                      <dd className="inline text-zinc-400">{item.benefit}</dd>
+                    </div>
+                    <div>
+                      <dt className="inline font-medium text-zinc-300">Where it stands: </dt>
+                      <dd className="inline text-zinc-400">{item.state}.</dd>
+                    </div>
+                  </dl>
+                </div>
+              ))}
+            </div>
+            <H3>Upgrades</H3>
+            <List items={v2Upgrades} />
+            <H3>Polish</H3>
+            <List items={v2Polish} />
+            <Callout title="Where v2 stands">
+              Version 2 is finished and tested against a throwaway monorepo with a stub backend. It is in local testing
+              before it replaces version 1 in the client monorepos.
+            </Callout>
+
             <H2 id="why">Why it exists</H2>
             <List items={tool.problem.points} />
             <H3>The idea</H3>
@@ -247,6 +296,14 @@ export default function IntegrationStatusDocs() {
               <Code>what</Code> is the exact request, and <Code>why</Code> says what it breaks for people using the app.
             </P>
             <CodeBlock title="src/data/asks.ts" code={askExample} />
+            <H3>A partly connected module says why</H3>
+            <P>
+              In version 2 a module that is wired but held back must name the reason: an open or claimed ask, or a{" "}
+              <Code>pending</Code> item owned by <Code>frontend</Code> (code still to write) or <Code>check</Code> (it
+              should work, and nobody has confirmed it). Lint fails when a partly connected module has no reason left, so
+              the status cannot stay behind after the check is done.
+            </P>
+            <CodeBlock title="src/data/<app>.ts" code={pendingExample} />
 
             <H2 id="statuses">Statuses</H2>
             <H3>Module status</H3>
@@ -308,9 +365,50 @@ export default function IntegrationStatusDocs() {
                 "Ask cards with where, what and why, the modules each one blocks, and other apps it affects.",
                 "A Copy ask button that copies an ask as plain text, ready for a ticket or a chat.",
                 "Deep links to #module-<id> and #ask-<id> that open the right tab.",
+                "New in v2: modules as a list or a grid, a tab per status, and a 'waiting on' filter (Frontend, Backend, Product, Check).",
+                "New in v2: a 'How to read this page' panel that says what each label means, who acts on it and what they do next.",
+                "New in v2: a Checks tab, and a verification badge on each module and ask that opens the evidence behind it.",
               ]}
             />
             <CodeBlock title="apps/<app>/src/app/integration-status/page.tsx" code={routeExample} />
+
+            <H2 id="testing">Testing the claims</H2>
+            <P>
+              The smoke layer is optional and lives in its own folder; the core package never imports Playwright. A check
+              points at the data by id, and the entry&apos;s status sets what is expected. The suite never edits a status:
+              it reports a disagreement, and a person changes the data in a pull request.
+            </P>
+            <Table
+              head={["The data says", "Expected", "A surprise means"]}
+              rows={v2Expectations.map((row) => [row.status, row.expected, row.surprise])}
+            />
+            <H3>A probe</H3>
+            <P>
+              A probe asserts what the ask asks for, not what happens today. While the ask is open it is expected to
+              fail. The day it passes, the run says the backend fixed it without notice.
+            </P>
+            <CodeBlock title="smoke/asks/profile-update-500.probe.ts" code={probeExample} />
+            <H3>What the page shows for each check</H3>
+            <List
+              items={[
+                "What a pass proves, in one sentence, written by whoever wrote the check.",
+                "Each step and whether it passed, and each request with its method, path and status.",
+                "What was expected from the status at the time, what happened, and what to do next.",
+                "What a pass does not prove: the author's declared gaps, then a critique derived from the record.",
+                "The check's code, and when it last ran.",
+              ]}
+            />
+            <Callout title="Two files, on purpose">
+              Every run writes a gitignored result, so an unattended run never dirties the working tree. Only an explicit{" "}
+              <Code>--record</Code> writes the evidence file that is committed with the data, which keeps the generated doc
+              the same for everyone.
+            </Callout>
+
+            <H2 id="scripts">Scripts</H2>
+            <Table
+              head={["Command", "What it does"]}
+              rows={v2Scripts.map((row) => [<Code key={row.command}>{row.command}</Code>, row.does])}
+            />
 
             <H2 id="installation">Installation</H2>
             <P>
@@ -349,6 +447,25 @@ export default function IntegrationStatusDocs() {
               </Step>
             </Steps>
 
+            <H2 id="upgrading">Upgrading from v1</H2>
+            <P>
+              The tool copies its code into the repo, so updating the plugin changes nothing in a repo that is already set
+              up. The upgrade is a guided merge in four stages. Each is one commit and can be reverted on its own, and
+              the last two are opt-in.
+            </P>
+            <Table
+              head={["Stage", "Adds", "New dependency"]}
+              rows={v2UpgradeStages.map((row) => [row.stage, row.adds, row.dependency])}
+            />
+            <List
+              items={[
+                "Existing data files compile untouched: every new field is optional.",
+                "Links to #module-<id> and #ask-<id> keep working, and the page still opens in the list view.",
+                "Stage 1 lists every status that has fallen behind before the new rules are enforced, so they are corrected in that commit.",
+                "The plugin keeps working with a repo that has not been upgraded, and an upgraded repo works for a teammate without the plugin.",
+              ]}
+            />
+
             <H2 id="upkeep">Keeping it current</H2>
             <Table
               head={["When", "Do"]}
@@ -357,22 +474,23 @@ export default function IntegrationStatusDocs() {
                 ["A backend problem is found", "Add an ask with where, what and why, and link it from the modules it blocks."],
                 ["The backend says it is fixed", "Mark the ask claimed with the date."],
                 ["The fix is measured on staging", "Mark it fixed, record the answer, and update the modules."],
+                ["A pending check is confirmed (v2)", "Remove the pending item. If nothing else holds the module back, promote it to connected."],
+                ["An ask is logged or a screen is wired (v2)", "Write its probe or smoke, run pnpm status:smoke, then record."],
                 ["Any of the above", "Run pnpm status:doc and commit it separately as docs(integration-status): …"],
               ]}
             />
             <Callout title="Help for AI-assisted work">
-              The plugin adds a Claude Code hook. If a session commits wiring code without a matching integration-status
-              update, the assistant is sent back once to log it.
+              The plugin adds Claude Code hooks. If a session commits wiring code without a matching integration-status
+              update, the assistant is sent back once to log it. In version 2 it is also sent back when wiring has no
+              check, and it is told at the start of a session what the checks found.
             </Callout>
 
             <H2 id="limits">Limits</H2>
-            <List
-              items={[
-                "Nothing is detected automatically. The data is only as good as the logging.",
-                "The stale-doc check runs with pnpm lint. Repos without CI rely on people running it.",
-                "It describes the integration; it does not test it.",
-              ]}
-            />
+            <P>
+              The three limits of version 1 are covered under <a href="#whats-new" className="text-zinc-200 underline decoration-zinc-600 underline-offset-4">What&apos;s new in v2</a>.
+              These are the ones that remain.
+            </P>
+            <List items={v2RemainingLimits} />
 
             <div className="mt-16 flex flex-col gap-4 border-t border-zinc-800 pt-8 sm:flex-row sm:items-center sm:justify-between">
               <Link href="/#tools" className="hero-link text-sm">
